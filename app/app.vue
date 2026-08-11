@@ -242,8 +242,8 @@ onMounted(async () => {
               <p
                 class="hero-reveal max-w-sm font-sans text-base font-medium leading-relaxed text-smoke md:text-lg"
               >
-                Vue & Nuxt developer building fast, expressive products with
-                the kind of frontend craft people remember.
+                Vue & Nuxt developer building fast, expressive products with the
+                kind of frontend craft people remember.
               </p>
               <a
                 href="#work"
@@ -260,6 +260,7 @@ onMounted(async () => {
           <div
             class="portrait-wrap relative col-span-10 col-start-3 mt-8 h-[51vh] min-h-[390px] overflow-hidden md:absolute md:bottom-0 md:right-0 md:mt-0 md:h-[92vh] md:w-[45vw] md:max-w-[720px]"
           >
+            <!--  -->
             <img
               src="/riswin-portrait.png"
               alt="Portrait of Riswin Mohammed"
