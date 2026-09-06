@@ -25,7 +25,9 @@ body::before {
 ::selection { background: var(--acid); color: var(--ink); }
 a, button { cursor: none; }
 .site-shell { overflow: clip; }
-.hero-title { font-size: clamp(5.4rem, 13.2vw, 13.7rem); }
+.hero-copy { container-type: inline-size; min-width: 0; }
+.hero-title { font-size: min(21cqi, 13.7rem); }
+.hero-title .hero-title-long { font-size: 14cqi; line-height: 1; letter-spacing: -.065em; }
 .nav-link { position: relative; }
 .nav-link::after { content: ''; position: absolute; inset: auto 0 -5px; height: 1px; background: var(--acid); transform: scaleX(0); transform-origin: right; transition: transform .3s ease; }
 .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
@@ -33,8 +35,8 @@ a, button { cursor: none; }
 .project-row::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 5%, transparent)); opacity: 0; transition: opacity .4s ease; pointer-events: none; }
 .project-row:hover::before { opacity: 1; }
 .marquee { animation: marquee 28s linear infinite; }
-.cursor-dot { margin-left: -4px; margin-top: -4px; }
-.cursor-halo { margin-left: -20px; margin-top: -20px; transition: width .25s, height .25s, margin .25s, background .25s; }
+.cursor-dot { margin-left: -4px; margin-top: -4px; mix-blend-mode: difference; }
+.cursor-halo { margin-left: -20px; margin-top: -20px; mix-blend-mode: difference; transition: width .25s, height .25s, margin .25s, background .25s; }
 .is-hovering .cursor-halo { width: 72px; height: 72px; margin-left: -36px; margin-top: -36px; background: rgb(199 255 24 / .08); }
 
 @keyframes marquee { to { transform: translateX(-50%); } }

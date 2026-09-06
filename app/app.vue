@@ -2,54 +2,131 @@
 import {
   ArrowDownRight,
   ArrowUpRight,
+  Bot,
   Github,
   Mail,
+  MessageSquare,
   MoveRight,
+  SendHorizontal,
+  X,
 } from "lucide-vue-next";
 
-const projects = [
+type Project = {
+  no: string;
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  story?: string;
+  role?: string[];
+  stack: string[];
+  url: string;
+  accent: string;
+  featured?: boolean;
+  privacyNote?: string;
+};
+
+const projects: Project[] = [
   {
     no: "01",
-    title: "SaaS Waste Detector",
-    type: "Product intelligence / 2026",
+    title: "Woltiz",
+    category: "Tailored ecommerce website",
+    year: "2024",
     description:
-      "A focused Nuxt product for finding forgotten subscriptions and turning recurring software spend into clear action.",
-    stack: ["Nuxt", "Vue", "TypeScript"],
-    url: "https://github.com/rizwyy/saas-waste-detector",
+      "A custom ecommerce experience shaped around the business and its customers.",
+    story:
+      "A tailored ecommerce experience, designed and built around the business, its customers, and the path from product discovery to purchase.",
+    role: [
+      "Client acquisition & sales",
+      "UX direction",
+      "UI design",
+      "Frontend development",
+      "Responsive implementation",
+      "Iteration",
+    ],
+    stack: ["Vue", "Nuxt", "TypeScript", "Tailwind CSS", "GSAP"],
+    url: "https://carpets-woltiz.netlify.app/",
     accent: "#c7ff18",
+    featured: true,
   },
   {
     no: "02",
     title: "Water Round",
-    type: "Operations platform / 2026",
+    category: "Operations platform",
+    year: "2026",
     description:
       "A Vue-powered field workflow that makes everyday water-round operations feel fast, legible, and surprisingly calm.",
     stack: ["Vue", "JavaScript", "Workflow UX"],
     url: "https://github.com/rizwyy/water-round-app",
     accent: "#8de1ff",
   },
-  {
-    no: "03",
-    title: "Riz Carlton",
-    type: "Digital experience / 2024",
-    description:
-      "An Astro experiment balancing a playful concept with quick loading, bold art direction, and clean frontend craft.",
-    stack: ["Astro", "Motion", "Creative Dev"],
-    url: "https://github.com/rizwyy/riz-carlton",
-    accent: "#ff805d",
-  },
 ];
 
+const featuredProject = computed(() =>
+  projects.find((project) => project.featured),
+);
+const supportingProjects = computed(() =>
+  projects.filter((project) => !project.featured),
+);
+
 const tools = [
+  "AWS",
+  "BEDROCK",
+  "LLMS",
+  "PYTHON",
+  "TYPESCRIPT",
   "NUXT",
   "VUE",
-  "TYPESCRIPT",
-  "GSAP",
-  "TAILWIND",
   "NODE",
-  "ASTRO",
-  "GIT",
+  "RAG",
 ];
+
+const certification = {
+  title: "AWS Certified AI Practitioner",
+  issuer: "Amazon Web Services",
+  issued: "30 Aug 2026",
+  validThrough: "30 Aug 2029",
+  validationId: "408c95adc9bc486a813bb3b269c3ee5a",
+  verificationUrl: "https://aws.amazon.com/verification",
+  image: "/aws-certified-ai-practitioner.png",
+};
+
+type ChatMessage = {
+  id: number;
+  role: "assistant" | "user";
+  content: string;
+};
+
+const isAwsChatOpen = ref(false);
+const awsPrompt = ref("");
+const awsMessages = ref<ChatMessage[]>([
+  {
+    id: 1,
+    role: "assistant",
+    content:
+      "Hi — I’m the frontend preview for an AWS assistant. Ask a question to test the chat experience.",
+  },
+]);
+const awsSuggestions = [
+  "How should I deploy a Nuxt app?",
+  "What would a secure API setup look like?",
+  "How can I store user uploads?",
+];
+
+function sendAwsMessage(message = awsPrompt.value) {
+  const content = message.trim();
+  if (!content) return;
+
+  awsMessages.value.push({ id: Date.now(), role: "user", content });
+  awsPrompt.value = "";
+  awsMessages.value.push({
+    id: Date.now() + 1,
+    role: "assistant",
+    content:
+      "This is a frontend-only preview. Connect this interface to your AWS backend when you’re ready to return live, secure answers.",
+  });
+}
+
 const year = new Date().getFullYear();
 
 onMounted(async () => {
@@ -97,6 +174,19 @@ onMounted(async () => {
     );
 
   gsap.utils.toArray<HTMLElement>(".reveal").forEach((element) => {
+    if (element.classList.contains("featured-project")) {
+      const featureItems = element.querySelectorAll(".featured-project-reveal");
+      gsap.from(featureItems, {
+        y: 28,
+        opacity: 0,
+        duration: 0.75,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: element, start: "top 82%" },
+      });
+      return;
+    }
+
     gsap.from(element, {
       y: 70,
       opacity: 0,
@@ -179,6 +269,126 @@ onMounted(async () => {
       class="cursor-halo pointer-events-none fixed left-0 top-0 z-[119] hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-acid/50 lg:block"
     />
 
+    <div
+      class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-3 md:bottom-8 md:right-8"
+    >
+      <Transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="translate-y-4 opacity-0"
+        enter-to-class="translate-y-0 opacity-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="translate-y-0 opacity-100"
+        leave-to-class="translate-y-4 opacity-0"
+      >
+        <section
+          v-if="isAwsChatOpen"
+          aria-label="AWS assistant preview"
+          class="aws-chat-panel w-[calc(100vw-2.5rem)] overflow-hidden border border-acid/35 bg-ink/95 shadow-[0_24px_80px_rgba(0,0,0,.45)] backdrop-blur md:w-[25rem]"
+          @keydown.esc="isAwsChatOpen = false"
+        >
+          <div
+            class="flex items-start justify-between border-b border-white/10 px-5 py-4"
+          >
+            <div class="flex items-center gap-3">
+              <span
+                class="flex h-9 w-9 items-center justify-center rounded-full bg-acid text-ink"
+                ><Bot class="h-4 w-4"
+              /></span>
+              <div>
+                <p
+                  class="font-sans text-sm font-semibold tracking-[-.03em] text-bone"
+                >
+                  AWS Launch Assistant
+                </p>
+                <p
+                  class="mt-0.5 font-mono text-[8px] uppercase tracking-[.14em] text-acid"
+                >
+                  Frontend preview
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              aria-label="Close AWS assistant"
+              class="flex h-8 w-8 items-center justify-center text-smoke transition-colors hover:text-acid"
+              @click="isAwsChatOpen = false"
+            >
+              <X class="h-4 w-4" />
+            </button>
+          </div>
+
+          <div
+            class="max-h-[min(22rem,48svh)] space-y-4 overflow-y-auto px-5 py-5"
+            aria-live="polite"
+          >
+            <div
+              v-for="message in awsMessages"
+              :key="message.id"
+              :class="
+                message.role === 'user'
+                  ? 'ml-8 border-acid/30 bg-acid/10 text-bone'
+                  : 'mr-8 border-white/10 bg-white/[.04] text-smoke'
+              "
+              class="border px-3 py-3 font-sans text-[13px] leading-5"
+            >
+              {{ message.content }}
+            </div>
+          </div>
+
+          <div class="border-t border-white/10 px-5 py-4">
+            <div class="mb-3 flex gap-2 overflow-x-auto pb-1">
+              <button
+                v-for="suggestion in awsSuggestions"
+                :key="suggestion"
+                type="button"
+                class="shrink-0 border border-white/15 px-2.5 py-1.5 text-left font-mono text-[8px] uppercase leading-4 tracking-[.08em] text-smoke transition-colors hover:border-acid/50 hover:text-acid"
+                @click="sendAwsMessage(suggestion)"
+              >
+                {{ suggestion }}
+              </button>
+            </div>
+            <form
+              class="flex items-center gap-2"
+              @submit.prevent="sendAwsMessage()"
+            >
+              <label class="sr-only" for="aws-chat-prompt"
+                >Ask the AWS assistant</label
+              >
+              <input
+                id="aws-chat-prompt"
+                v-model="awsPrompt"
+                type="text"
+                autocomplete="off"
+                placeholder="Ask about your AWS build..."
+                class="min-w-0 flex-1 bg-transparent py-2 font-sans text-sm text-bone outline-none placeholder:text-smoke/65"
+              />
+              <button
+                type="submit"
+                aria-label="Send message"
+                class="flex h-9 w-9 shrink-0 items-center justify-center bg-acid text-ink transition-transform hover:scale-105 disabled:opacity-40"
+                :disabled="!awsPrompt.trim()"
+              >
+                <SendHorizontal class="h-4 w-4" />
+              </button>
+            </form>
+          </div>
+        </section>
+      </Transition>
+
+      <button
+        type="button"
+        :aria-expanded="isAwsChatOpen"
+        aria-controls="aws-chat-prompt"
+        class="group flex items-center gap-3 border border-acid/50 bg-ink px-4 py-3 font-mono text-[9px] uppercase tracking-[.14em] text-bone shadow-[0_12px_40px_rgba(0,0,0,.28)] transition-colors hover:bg-acid hover:text-ink"
+        @click="isAwsChatOpen = !isAwsChatOpen"
+      >
+        <MessageSquare
+          class="h-4 w-4 text-acid transition-colors group-hover:text-ink"
+        />
+        <span>AWS assistant</span>
+      </button>
+    </div>
+
     <header class="fixed inset-x-0 top-0 z-50 mix-blend-difference">
       <nav
         class="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-6 md:px-10"
@@ -212,27 +422,30 @@ onMounted(async () => {
         <div
           class="mx-auto grid min-h-[calc(100svh-9rem)] max-w-[1600px] grid-cols-12 items-end"
         >
-          <div class="relative z-20 col-span-12 pb-5 md:col-span-8 md:pb-[6vh]">
+          <div
+            class="hero-copy relative z-20 col-span-12 pb-5 md:col-span-8 md:pb-[6vh]"
+          >
             <div
               class="mb-8 flex items-center gap-3 overflow-hidden font-mono text-[10px] uppercase tracking-[.18em] text-smoke md:mb-12"
             >
               <span
                 class="hero-reveal h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#c7ff18]"
               />
-              <span class="hero-reveal">Available for select projects</span>
+              <span class="hero-reveal"
+                >Available for select AI & product projects</span
+              >
             </div>
             <h1
-              class="hero-title font-sans font-extrabold uppercase leading-[.77] tracking-[-.085em]"
+              class="hero-title font-sans font-[600] uppercase leading-[.95] tracking-[-.09em]"
             >
               <span class="block overflow-hidden"
-                ><span class="hero-reveal block">I build</span></span
-              >
-              <span class="block overflow-hidden"
-                ><span class="hero-reveal block text-acid">digital</span></span
-              >
-              <span class="block overflow-hidden"
                 ><span class="hero-reveal block"
-                  >impact<span class="text-smoke">.</span></span
+                  >I build <span class="text-acid">AI</span></span
+                ></span
+              >
+              <span class="block overflow-hidden"
+                ><span class="hero-reveal hero-title-long block"
+                  >applications<span class="text-smoke">.</span></span
                 ></span
               >
             </h1>
@@ -242,8 +455,8 @@ onMounted(async () => {
               <p
                 class="hero-reveal max-w-sm font-sans text-base font-medium leading-relaxed text-smoke md:text-lg"
               >
-                Vue & Nuxt developer building fast, expressive products with the
-                kind of frontend craft people remember.
+                AI Application Engineer building practical, production-minded
+                experiences with TypeScript, Vue, Nuxt, and AWS.
               </p>
               <a
                 href="#work"
@@ -292,23 +505,104 @@ onMounted(async () => {
             <p
               class="reveal text-balance font-sans text-[clamp(2rem,5vw,5.7rem)] font-semibold leading-[1.02] tracking-[-.055em]"
             >
-              I build Vue-first products that feel
-              <span class="text-smoke">clean, fast, human</span> and
-              unmistakably polished.
+              I build AI applications that are
+              <span class="text-smoke">useful, grounded, and human</span>—with
+              the product craft to make them feel polished.
             </p>
             <div
               class="mt-14 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-20"
             >
               <p class="reveal font-sans text-sm leading-7 text-smoke">
-                Vue is my home base and Nuxt is the framework I reach for first.
-                I use them to turn product thinking into structured,
-                maintainable interfaces that stay fast as they grow.
+                As an AWS Certified AI Practitioner, I combine full-stack
+                application development with an AI engineering practice. My work
+                spans practical product interfaces, cloud-ready systems, and the
+                foundations for LLM-powered features.
               </p>
               <p class="reveal font-sans text-sm leading-7 text-smoke">
-                Around that core, I bring TypeScript, Tailwind, GSAP, Node, and
-                thoughtful motion. The outcome is useful software with a clear
-                architecture and a distinct point of view.
+                Vue and Nuxt remain my frontend foundation, alongside
+                TypeScript, Node, AWS, and Amazon Bedrock. I use them to turn
+                product ideas into clear, maintainable applications.
               </p>
+            </div>
+            <div
+              class="reveal mt-16 grid items-start gap-6 border border-white/15 bg-white/[.025] p-6 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-8 md:p-8"
+            >
+              <a
+                :href="certification.image"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open full-size AWS Certified AI Practitioner certificate"
+                class="group block w-40 overflow-hidden border border-white/20 transition-colors hover:border-acid focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-acid"
+              >
+                <img
+                  :src="certification.image"
+                  :alt="`${certification.title} certificate issued by ${certification.issuer}`"
+                  width="1650"
+                  height="1275"
+                  loading="lazy"
+                  class="block h-auto w-full object-contain"
+                />
+                <span
+                  class="flex items-center justify-between gap-2 px-3 py-2 font-mono text-[8px] uppercase tracking-[.1em] text-smoke group-hover:text-acid"
+                >
+                  View certificate <ArrowUpRight class="h-3 w-3" />
+                </span>
+              </a>
+              <div class="min-w-0">
+                <div>
+                  <p
+                    class="mb-4 font-mono text-[9px] uppercase tracking-[.18em] text-acid"
+                  >
+                    Certification
+                  </p>
+                  <p
+                    class="mb-3 font-mono text-[9px] uppercase tracking-[.14em] text-smoke"
+                  >
+                    {{ certification.issuer }}
+                  </p>
+                  <h3
+                    class="max-w-md font-sans text-[clamp(1.6rem,3vw,2.5rem)] font-semibold leading-tight tracking-[-.04em] text-bone"
+                  >
+                    {{ certification.title }}
+                  </h3>
+                </div>
+                <div class="mt-6 border-t border-white/15 pt-5">
+                  <dl
+                    class="grid grid-cols-2 gap-5 font-mono text-[9px] uppercase tracking-[.12em]"
+                  >
+                    <div>
+                      <dt class="mb-1 text-smoke">Issued</dt>
+                      <dd class="text-bone">{{ certification.issued }}</dd>
+                    </div>
+                    <div>
+                      <dt class="mb-1 text-smoke">Valid through</dt>
+                      <dd class="text-bone">
+                        {{ certification.validThrough }}
+                      </dd>
+                    </div>
+                  </dl>
+                  <div
+                    class="mt-6 flex flex-wrap items-center justify-between gap-4"
+                  >
+                    <p
+                      class="break-all font-mono text-[8px] uppercase tracking-[.1em] text-smoke"
+                    >
+                      ID: {{ certification.validationId }}
+                    </p>
+                    <a
+                      :href="certification.verificationUrl"
+                      target="_blank"
+                      rel="noreferrer"
+                      class="group flex items-center gap-2 font-mono text-[9px] uppercase tracking-[.12em] text-acid transition-colors hover:text-bone"
+                    >
+                      Verify with AWS
+                      <ArrowUpRight
+                        class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -337,7 +631,116 @@ onMounted(async () => {
           </div>
 
           <article
-            v-for="project in projects"
+            v-if="featuredProject"
+            :key="featuredProject.no"
+            class="featured-project reveal group relative mb-12 overflow-hidden border border-acid/25 px-5 py-7 md:mb-16 md:px-10 md:py-10"
+          >
+            <div
+              class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_14%,rgba(199,255,24,.13),transparent_30%),linear-gradient(135deg,rgba(199,255,24,.07),transparent_52%)]"
+            />
+            <div
+              class="pointer-events-none absolute -right-10 -top-16 select-none font-sans text-[14rem] font-extrabold leading-none tracking-[-.1em] text-acid/[.035] md:text-[21rem]"
+            >
+              {{ featuredProject.no }}
+            </div>
+            <div class="relative">
+              <div
+                class="featured-project-reveal mb-10 flex items-center justify-between gap-5 border-b border-acid/20 pb-4 md:mb-14"
+              >
+                <div class="flex items-center gap-3">
+                  <span
+                    class="h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#c7ff18]"
+                  />
+                  <span
+                    class="font-mono text-[9px] uppercase tracking-[.17em] text-acid"
+                    >Featured Project</span
+                  >
+                </div>
+                <span
+                  class="font-mono text-[10px] tracking-[.15em] text-smoke"
+                  >{{ featuredProject.no }}</span
+                >
+              </div>
+              <div class="grid grid-cols-12 gap-y-10 md:gap-x-12 md:gap-y-14">
+                <div class="featured-project-reveal col-span-12 lg:col-span-7">
+                  <div
+                    class="mb-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[9px] uppercase tracking-[.17em] text-smoke"
+                  >
+                    <span>{{ featuredProject.category }}</span
+                    ><span class="h-1 w-1 rounded-full bg-acid" /><span>{{
+                      featuredProject.year
+                    }}</span>
+                  </div>
+                  <h3
+                    class="mb-6 font-sans text-[clamp(4rem,8.5vw,8.5rem)] font-extrabold uppercase leading-[.75] tracking-[-.08em] text-acid md:mb-9"
+                  >
+                    {{ featuredProject.title }}
+                  </h3>
+                  <p
+                    class="max-w-2xl font-sans text-lg font-medium leading-8 text-bone md:text-xl md:leading-9"
+                  >
+                    {{ featuredProject.story }}
+                  </p>
+                </div>
+                <div
+                  class="featured-project-reveal col-span-12 flex items-start lg:col-span-5 lg:justify-end lg:pt-2"
+                >
+                  <a
+                    :href="featuredProject.url"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="group/link inline-flex items-center gap-3 rounded-full border border-acid/40 px-5 py-3 font-mono text-[9px] uppercase tracking-[.14em] text-acid transition-colors duration-300 hover:bg-acid hover:text-ink"
+                  >
+                    View live site
+                    <ArrowUpRight
+                      class="h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                    />
+                  </a>
+                </div>
+                <div
+                  class="featured-project-reveal col-span-12 border-t border-white/10 pt-7 lg:col-span-7 lg:pt-8"
+                >
+                  <p
+                    class="mb-4 font-mono text-[8px] uppercase tracking-[.17em] text-smoke"
+                  >
+                    My role
+                  </p>
+                  <ul
+                    class="flex flex-wrap gap-x-4 gap-y-2"
+                    aria-label="Woltiz project role"
+                  >
+                    <li
+                      v-for="item in featuredProject.role"
+                      :key="item"
+                      class="font-sans text-sm leading-5 text-bone before:mr-2 before:text-acid before:content-['+']"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </div>
+                <div
+                  class="featured-project-reveal col-span-12 border-t border-white/10 pt-7 lg:col-span-5 lg:pt-8"
+                >
+                  <p
+                    class="mb-4 font-mono text-[8px] uppercase tracking-[.17em] text-smoke"
+                  >
+                    Technology
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <span
+                      v-for="item in featuredProject.stack"
+                      :key="item"
+                      class="rounded-full border border-acid/30 bg-acid/10 px-3 py-1.5 font-mono text-[8px] uppercase tracking-[.1em] text-acid"
+                      >{{ item }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article
+            v-for="project in supportingProjects"
             :key="project.no"
             class="project-row group relative grid grid-cols-12 gap-y-8 border-t border-white/15 py-10 md:py-14"
           >
@@ -348,7 +751,7 @@ onMounted(async () => {
               <p
                 class="mb-3 font-mono text-[9px] uppercase tracking-[.17em] text-smoke"
               >
-                {{ project.type }}
+                {{ project.category }} / {{ project.year }}
               </p>
               <h3
                 class="font-sans text-[clamp(2rem,4.7vw,5rem)] font-semibold leading-none tracking-[-.055em] transition-colors duration-300 group-hover:text-[var(--accent)]"
@@ -471,7 +874,7 @@ onMounted(async () => {
             </p>
             <div class="reveal flex flex-wrap gap-3">
               <a
-                href="mailto:123391105+rizwyy@users.noreply.github.com"
+                href="mailto:riswinwork@gmail.com"
                 class="group flex items-center gap-3 rounded-full border border-black/30 px-5 py-3 font-mono text-[10px] uppercase tracking-[.12em] transition-colors hover:bg-ink hover:text-acid"
                 ><Mail class="h-4 w-4" /> Email me</a
               >
