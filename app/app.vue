@@ -18,6 +18,7 @@ type Project = {
   year: string;
   description: string;
   story?: string;
+  details?: string;
   role?: string[];
   stack: string[];
   url: string;
@@ -29,6 +30,23 @@ type Project = {
 const projects: Project[] = [
   {
     no: "01",
+    title: "Atlas",
+    category: "AI-powered company knowledge assistant",
+    year: "2026",
+    description:
+      "A full-stack RAG application for finding answers across internal company documents, with source citations for verification.",
+    story:
+      "Helping employees find answers across internal company documents. Atlas combines a Nuxt interface with Amazon Bedrock retrieval and generation, with citations that link answers back to their sources.",
+    details:
+      "Built with Cognito authentication, JWT-protected APIs, permission-aware retrieval, and document ingestion. Conversation history, user feedback, guardrail support, latency monitoring, and a versioned RAG evaluation suite support the experience.",
+    role: ["System architecture", "Full-stack development", "AWS integration", "RAG evaluation"],
+    stack: ["Nuxt", "Vue", "TypeScript", "Python", "AWS Lambda", "API Gateway", "Amazon Bedrock", "Bedrock Knowledge Bases", "S3", "DynamoDB", "Cognito", "IAM", "CloudWatch"],
+    url: "https://atlas-rag.netlify.app/",
+    accent: "#c7ff18",
+    featured: true,
+  },
+  {
+    no: "02",
     title: "Woltiz",
     category: "Tailored ecommerce website",
     year: "2024",
@@ -50,7 +68,7 @@ const projects: Project[] = [
     featured: true,
   },
   {
-    no: "02",
+    no: "03",
     title: "Water Round",
     category: "Operations platform",
     year: "2026",
@@ -62,8 +80,8 @@ const projects: Project[] = [
   },
 ];
 
-const featuredProject = computed(() =>
-  projects.find((project) => project.featured),
+const featuredProjects = computed(() =>
+  projects.filter((project) => project.featured),
 );
 const supportingProjects = computed(() =>
   projects.filter((project) => !project.featured),
@@ -631,7 +649,7 @@ onMounted(async () => {
           </div>
 
           <article
-            v-if="featuredProject"
+            v-for="featuredProject in featuredProjects"
             :key="featuredProject.no"
             class="featured-project reveal group relative mb-12 overflow-hidden border border-acid/25 px-5 py-7 md:mb-16 md:px-10 md:py-10"
           >
@@ -681,6 +699,9 @@ onMounted(async () => {
                   >
                     {{ featuredProject.story }}
                   </p>
+                  <p v-if="featuredProject.details" class="mt-5 max-w-2xl font-sans text-sm leading-7 text-smoke">
+                    {{ featuredProject.details }}
+                  </p>
                 </div>
                 <div
                   class="featured-project-reveal col-span-12 flex items-start lg:col-span-5 lg:justify-end lg:pt-2"
@@ -707,7 +728,7 @@ onMounted(async () => {
                   </p>
                   <ul
                     class="flex flex-wrap gap-x-4 gap-y-2"
-                    aria-label="Woltiz project role"
+                    :aria-label="`${featuredProject.title} project role`"
                   >
                     <li
                       v-for="item in featuredProject.role"
