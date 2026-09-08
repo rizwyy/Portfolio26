@@ -21,7 +21,9 @@ type Project = {
   details?: string;
   role?: string[];
   stack: string[];
-  url: string;
+  url?: string;
+  status?: string;
+  nextSteps?: string;
   accent: string;
   featured?: boolean;
   privacyNote?: string;
@@ -77,6 +79,50 @@ const projects: Project[] = [
     stack: ["Vue", "JavaScript", "Workflow UX"],
     url: "https://github.com/rizwyy/water-round-app",
     accent: "#8de1ff",
+  },
+  {
+    no: "04",
+    title: "Relay",
+    category: "AI customer support agent frontend",
+    year: "2026",
+    status: "In progress · Frontend prototype",
+    description:
+      "A responsive support workspace for order tracking, refunds, return policies, product search, and simulated tickets. Conversation context and an activity panel expose tool inputs and results.",
+    details:
+      "Working frontend with simulated responses and tool calls.",
+    nextSteps: "LLM integration and a FastAPI backend.",
+    stack: ["React", "TypeScript", "Tailwind CSS", "shadcn/ui"],
+    accent: "#c7ff18",
+  },
+  {
+    no: "05",
+    title: "Folio",
+    category: "AI invoice processing workspace",
+    year: "2026",
+    status: "In progress · Frontend prototype",
+    description:
+      "A responsive invoice review workspace with PDF uploads and previews, search and status filters, side-by-side editing, human approval, and JSON export.",
+    details:
+      "Working frontend with sample extraction data and browser-local uploads.",
+    nextSteps:
+      "S3, Textract, and Bedrock integration for extraction, validation, and classification, with human approval.",
+    stack: ["React", "TypeScript", "Tailwind CSS", "shadcn/ui"],
+    accent: "#c7ff18",
+  },
+  {
+    no: "06",
+    title: "Invoxa",
+    category: "Invoice management for small businesses",
+    year: "2026",
+    status: "In progress · Local prototype",
+    description:
+      "An invoice workspace for Indian small businesses, with searchable payment records, side-by-side review, editable details, and paid/unpaid tracking. Unreviewed invoices stay out of totals until confirmed.",
+    details:
+      "Local interactive prototype using sample data; AWS integration in progress.",
+    nextSteps:
+      "Cognito authentication, private S3 uploads, and Textract extraction with human review, supported by Lambda, API Gateway, and DynamoDB.",
+    stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS"],
+    accent: "#c7ff18",
   },
 ];
 
@@ -780,6 +826,9 @@ onMounted(async () => {
               >
                 {{ project.title }}
               </h3>
+              <p v-if="project.status" class="mt-5 inline-block border border-acid/25 px-3 py-2 font-mono text-[9px] uppercase leading-5 tracking-[.1em] text-acid">
+                {{ project.status }}
+              </p>
             </div>
             <div
               class="col-span-10 col-start-3 md:col-span-3 md:col-start-auto"
@@ -787,6 +836,16 @@ onMounted(async () => {
               <p class="max-w-sm font-sans text-sm leading-6 text-smoke">
                 {{ project.description }}
               </p>
+              <dl v-if="project.details || project.nextSteps" class="mt-5 space-y-4 border-t border-white/10 pt-5">
+                <div v-if="project.details">
+                  <dt class="mb-1 font-mono text-[9px] uppercase tracking-[.12em] text-bone">Current scope</dt>
+                  <dd class="font-sans text-sm leading-6 text-smoke">{{ project.details }}</dd>
+                </div>
+                <div v-if="project.nextSteps">
+                  <dt class="mb-1 font-mono text-[9px] uppercase tracking-[.12em] text-bone">Planned</dt>
+                  <dd class="font-sans text-sm leading-6 text-smoke">{{ project.nextSteps }}</dd>
+                </div>
+              </dl>
               <div class="mt-6 flex flex-wrap gap-2">
                 <span
                   v-for="item in project.stack"
@@ -798,6 +857,7 @@ onMounted(async () => {
             </div>
             <div class="col-span-2 flex justify-end">
               <a
+                v-if="project.url"
                 :href="project.url"
                 target="_blank"
                 rel="noreferrer"
