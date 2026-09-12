@@ -161,6 +161,7 @@ type ChatMessage = {
   content: string;
 };
 
+const showAwsChat = false;
 const isAwsChatOpen = ref(false);
 const awsPrompt = ref("");
 const awsMessages = ref<ChatMessage[]>([
@@ -334,6 +335,7 @@ onMounted(async () => {
     />
 
     <div
+      v-if="showAwsChat"
       class="fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-3 md:bottom-8 md:right-8"
     >
       <Transition
