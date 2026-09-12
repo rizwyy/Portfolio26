@@ -42,8 +42,27 @@ const projects: Project[] = [
       "Helping employees find answers across internal company documents. Atlas combines a Nuxt interface with Amazon Bedrock retrieval and generation, with citations that link answers back to their sources.",
     details:
       "Built with Cognito authentication, JWT-protected APIs, permission-aware retrieval, and document ingestion. Conversation history, user feedback, guardrail support, latency monitoring, and a versioned RAG evaluation suite support the experience.",
-    role: ["System architecture", "Full-stack development", "AWS integration", "RAG evaluation"],
-    stack: ["Nuxt", "Vue", "TypeScript", "Python", "AWS Lambda", "API Gateway", "Amazon Bedrock", "Bedrock Knowledge Bases", "S3", "DynamoDB", "Cognito", "IAM", "CloudWatch"],
+    role: [
+      "System architecture",
+      "Full-stack development",
+      "AWS integration",
+      "RAG evaluation",
+    ],
+    stack: [
+      "Nuxt",
+      "Vue",
+      "TypeScript",
+      "Python",
+      "AWS Lambda",
+      "API Gateway",
+      "Amazon Bedrock",
+      "Bedrock Knowledge Bases",
+      "S3",
+      "DynamoDB",
+      "Cognito",
+      "IAM",
+      "CloudWatch",
+    ],
     url: "https://atlas-rag.netlify.app/",
     accent: "#c7ff18",
     featured: true,
@@ -103,8 +122,7 @@ const projects: Project[] = [
     status: "In progress · Frontend prototype",
     description:
       "A responsive support workspace for order tracking, refunds, return policies, product search, and simulated tickets. Conversation context and an activity panel expose tool inputs and results.",
-    details:
-      "Working frontend with simulated responses and tool calls.",
+    details: "Working frontend with simulated responses and tool calls.",
     nextSteps: "LLM integration and a FastAPI backend.",
     stack: ["React", "TypeScript", "Tailwind CSS", "shadcn/ui"],
     accent: "#c7ff18",
@@ -138,7 +156,6 @@ const projects: Project[] = [
       "Deployable adapters are prepared for Cognito, API Gateway, Lambda, DynamoDB, private S3 storage, Textract extraction, SNS/SQS processing, and SES reminders. Live AWS validation is outside this portfolio release.",
     stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS", "Node.js", "AWS"],
     url: "https://github.com/rizwyy/invoxa",
-    image: "/invoxa-before-after.png",
     accent: "#c7ff18",
   },
 ];
@@ -764,7 +781,10 @@ onMounted(async () => {
                   >
                     {{ featuredProject.story }}
                   </p>
-                  <p v-if="featuredProject.details" class="mt-5 max-w-2xl font-sans text-sm leading-7 text-smoke">
+                  <p
+                    v-if="featuredProject.details"
+                    class="mt-5 max-w-2xl font-sans text-sm leading-7 text-smoke"
+                  >
                     {{ featuredProject.details }}
                   </p>
                 </div>
@@ -845,7 +865,10 @@ onMounted(async () => {
               >
                 {{ project.title }}
               </h3>
-              <p v-if="project.status" class="mt-5 inline-block border border-acid/25 px-3 py-2 font-mono text-[9px] uppercase leading-5 tracking-[.1em] text-acid">
+              <p
+                v-if="project.status"
+                class="mt-5 inline-block border border-acid/25 px-3 py-2 font-mono text-[9px] uppercase leading-5 tracking-[.1em] text-acid"
+              >
                 {{ project.status }}
               </p>
             </div>
@@ -855,17 +878,35 @@ onMounted(async () => {
               <p class="max-w-sm font-sans text-sm leading-6 text-smoke">
                 {{ project.description }}
               </p>
-              <dl v-if="project.details || project.nextSteps" class="mt-5 space-y-4 border-t border-white/10 pt-5">
+              <dl
+                v-if="project.details || project.nextSteps"
+                class="mt-5 space-y-4 border-t border-white/10 pt-5"
+              >
                 <div v-if="project.details">
-                  <dt class="mb-1 font-mono text-[9px] uppercase tracking-[.12em] text-bone">Current scope</dt>
-                  <dd class="font-sans text-sm leading-6 text-smoke">{{ project.details }}</dd>
+                  <dt
+                    class="mb-1 font-mono text-[9px] uppercase tracking-[.12em] text-bone"
+                  >
+                    Current scope
+                  </dt>
+                  <dd class="font-sans text-sm leading-6 text-smoke">
+                    {{ project.details }}
+                  </dd>
                 </div>
                 <div v-if="project.nextSteps">
-                  <dt class="mb-1 font-mono text-[9px] uppercase tracking-[.12em] text-bone">Planned</dt>
-                  <dd class="font-sans text-sm leading-6 text-smoke">{{ project.nextSteps }}</dd>
+                  <dt
+                    class="mb-1 font-mono text-[9px] uppercase tracking-[.12em] text-bone"
+                  >
+                    Planned
+                  </dt>
+                  <dd class="font-sans text-sm leading-6 text-smoke">
+                    {{ project.nextSteps }}
+                  </dd>
                 </div>
               </dl>
-              <div v-if="project.stack.length" class="mt-6 flex flex-wrap gap-2">
+              <div
+                v-if="project.stack.length"
+                class="mt-6 flex flex-wrap gap-2"
+              >
                 <span
                   v-for="item in project.stack"
                   :key="item"
@@ -886,7 +927,7 @@ onMounted(async () => {
                 <ArrowUpRight class="h-5 w-5" />
               </a>
             </div>
-            <div
+            <!-- <div
               v-if="project.image"
               class="col-span-10 col-start-3 overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:col-span-8"
             >
@@ -896,7 +937,7 @@ onMounted(async () => {
                 class="h-auto w-full"
                 loading="lazy"
               />
-            </div>
+            </div> -->
           </article>
         </div>
       </section>
