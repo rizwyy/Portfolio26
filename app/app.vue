@@ -114,13 +114,13 @@ const projects: Project[] = [
     title: "Invoxa",
     category: "Invoice management for small businesses",
     year: "2026",
-    status: "In progress · Local prototype",
+    status: "Working local MVP · AWS integration pending",
     description:
-      "An invoice workspace for Indian small businesses, with searchable payment records, side-by-side review, editable details, and paid/unpaid tracking. Unreviewed invoices stay out of totals until confirmed.",
+      "An invoice management workspace for Indian small businesses, supporting business workspaces, invoice uploads and previews, manual review and editing, payment tracking, search and filters, archive/restore, CSV export, and dashboard summaries.",
     details:
-      "Local interactive prototype using sample data; AWS integration in progress.",
+      "In development. A working local MVP with data that persists across sessions. No public demo yet.",
     nextSteps:
-      "Cognito authentication, private S3 uploads, and Textract extraction with human review, supported by Lambda, API Gateway, and DynamoDB.",
+      "Backend code is prepared for AWS authentication, storage, invoice extraction, and email reminders. AWS configuration, deployment, and live testing are pending; automated extraction and email reminders are not live yet.",
     stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS"],
     accent: "#c7ff18",
   },
