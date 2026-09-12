@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/main.css'],
+  vite: {
+    cacheDir: process.env.NUXT_VITE_CACHE_DIR || 'node_modules/.cache/vite'
+  },
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
