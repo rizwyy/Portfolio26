@@ -22,6 +22,7 @@ type Project = {
   role?: string[];
   stack: string[];
   url?: string;
+  image?: string;
   status?: string;
   nextSteps?: string;
   accent: string;
@@ -128,14 +129,16 @@ const projects: Project[] = [
     title: "Invoxa",
     category: "Invoice management for small businesses",
     year: "2026",
-    status: "Working local MVP · AWS integration pending",
+    status: "Completed portfolio release · Full-stack local MVP",
     description:
       "An invoice management workspace for Indian small businesses, supporting business workspaces, invoice uploads and previews, manual review and editing, payment tracking, search and filters, archive/restore, CSV export, and dashboard summaries.",
     details:
-      "In development. A working local MVP with data that persists across sessions. No public demo yet.",
+      "Tested local release with persistent accounts, isolated workspaces, protected document previews, validation, optimistic updates, and a complete supplier-invoice workflow.",
     nextSteps:
-      "Backend code is prepared for AWS authentication, storage, invoice extraction, and email reminders. AWS configuration, deployment, and live testing are pending; automated extraction and email reminders are not live yet.",
-    stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS"],
+      "Deployable adapters are prepared for Cognito, API Gateway, Lambda, DynamoDB, private S3 storage, Textract extraction, SNS/SQS processing, and SES reminders. Live AWS validation is outside this portfolio release.",
+    stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS", "Node.js", "AWS"],
+    url: "https://github.com/rizwyy/invoxa",
+    image: "/invoxa-before-after.png",
     accent: "#c7ff18",
   },
 ];
@@ -882,6 +885,17 @@ onMounted(async () => {
               >
                 <ArrowUpRight class="h-5 w-5" />
               </a>
+            </div>
+            <div
+              v-if="project.image"
+              class="col-span-10 col-start-3 overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:col-span-8"
+            >
+              <img
+                :src="project.image"
+                :alt="`${project.title} workflow comparison`"
+                class="h-auto w-full"
+                loading="lazy"
+              />
             </div>
           </article>
         </div>
