@@ -71,6 +71,20 @@ const projects: Project[] = [
   },
   {
     no: "03",
+    title: "Zentail",
+    category: "AI-assisted job search workspace",
+    year: "2026",
+    status: "Launched · Early release",
+    description:
+      "One dashboard to organize a job search: track applications and stages, analyze job fit with AI, compare resume results, and see overall progress.",
+    details:
+      "Built with my co-founder over four weeks, inspired by our own placement-season job searches. Available to try and actively being improved.",
+    stack: ["Next.js", "React"],
+    url: "https://zentail.netlify.app/",
+    accent: "#c7ff18",
+  },
+  {
+    no: "04",
     title: "Water Round",
     category: "Operations platform",
     year: "2026",
@@ -81,7 +95,7 @@ const projects: Project[] = [
     accent: "#8de1ff",
   },
   {
-    no: "04",
+    no: "05",
     title: "Relay",
     category: "AI customer support agent frontend",
     year: "2026",
@@ -95,7 +109,7 @@ const projects: Project[] = [
     accent: "#c7ff18",
   },
   {
-    no: "05",
+    no: "06",
     title: "Folio",
     category: "AI invoice processing workspace",
     year: "2026",
@@ -110,7 +124,7 @@ const projects: Project[] = [
     accent: "#c7ff18",
   },
   {
-    no: "06",
+    no: "07",
     title: "Invoxa",
     category: "Invoice management for small businesses",
     year: "2026",
@@ -848,7 +862,7 @@ onMounted(async () => {
                   <dd class="font-sans text-sm leading-6 text-smoke">{{ project.nextSteps }}</dd>
                 </div>
               </dl>
-              <div class="mt-6 flex flex-wrap gap-2">
+              <div v-if="project.stack.length" class="mt-6 flex flex-wrap gap-2">
                 <span
                   v-for="item in project.stack"
                   :key="item"
@@ -863,7 +877,7 @@ onMounted(async () => {
                 :href="project.url"
                 target="_blank"
                 rel="noreferrer"
-                :aria-label="`View ${project.title} on GitHub`"
+                :aria-label="`View ${project.title}`"
                 class="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:rotate-45 group-hover:border-acid group-hover:bg-acid group-hover:text-ink md:h-16 md:w-16"
               >
                 <ArrowUpRight class="h-5 w-5" />
