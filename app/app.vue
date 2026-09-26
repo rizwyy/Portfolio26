@@ -33,13 +33,13 @@ type Project = {
 const projects: Project[] = [
   {
     no: "01",
-    title: "Atlas",
+    title: "Contexta",
     category: "AI-powered company knowledge assistant",
     year: "2026",
     description:
       "A full-stack RAG application for finding answers across internal company documents, with source citations for verification.",
     story:
-      "Helping employees find answers across internal company documents. Atlas combines a Nuxt interface with Amazon Bedrock retrieval and generation, with citations that link answers back to their sources.",
+      "Helping employees find answers across internal company documents. Contexta combines a Nuxt interface with Amazon Bedrock retrieval and generation, with citations that link answers back to their sources.",
     details:
       "Built with Cognito authentication, JWT-protected APIs, permission-aware retrieval, and document ingestion. Conversation history, user feedback, guardrail support, latency monitoring, and a versioned RAG evaluation suite support the experience.",
     role: [
@@ -63,7 +63,7 @@ const projects: Project[] = [
       "IAM",
       "CloudWatch",
     ],
-    url: "https://atlas-rag.netlify.app/",
+    url: "https://contexta-aws.netlify.app/",
     accent: "#c7ff18",
     featured: true,
   },
@@ -147,15 +147,13 @@ const projects: Project[] = [
     title: "Invoxa",
     category: "Invoice management for small businesses",
     year: "2026",
-    status: "Completed portfolio release · Full-stack local MVP",
+    status: "Completed · Live",
     description:
       "An invoice management workspace for Indian small businesses, supporting business workspaces, invoice uploads and previews, manual review and editing, payment tracking, search and filters, archive/restore, CSV export, and dashboard summaries.",
     details:
-      "Tested local release with persistent accounts, isolated workspaces, protected document previews, validation, optimistic updates, and a complete supplier-invoice workflow.",
-    nextSteps:
-      "Deployable adapters are prepared for Cognito, API Gateway, Lambda, DynamoDB, private S3 storage, Textract extraction, SNS/SQS processing, and SES reminders. Live AWS validation is outside this portfolio release.",
+      "A live full-stack release with persistent accounts, isolated workspaces, protected document previews, validation, optimistic updates, and a complete supplier-invoice workflow.",
     stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS", "Node.js", "AWS"],
-    url: "https://github.com/rizwyy/invoxa",
+    url: "https://invoxa-aws.netlify.app/",
     accent: "#c7ff18",
   },
 ];
