@@ -150,11 +150,20 @@ const projects: Project[] = [
     status: "Completed · Live",
     description:
       "An invoice management workspace for Indian small businesses, supporting business workspaces, invoice uploads and previews, manual review and editing, payment tracking, search and filters, archive/restore, CSV export, and dashboard summaries.",
+    story:
+      "A complete invoice management workspace that helps Indian small businesses turn scattered supplier documents into organized, searchable payment records.",
     details:
       "A live full-stack release with persistent accounts, isolated workspaces, protected document previews, validation, optimistic updates, and a complete supplier-invoice workflow.",
+    role: [
+      "Product direction",
+      "UX/UI design",
+      "Full-stack development",
+      "AWS integration",
+    ],
     stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS", "Node.js", "AWS"],
     url: "https://invoxa-aws.netlify.app/",
     accent: "#c7ff18",
+    featured: true,
   },
 ];
 
@@ -768,6 +777,10 @@ onMounted(async () => {
                     ><span class="h-1 w-1 rounded-full bg-acid" /><span>{{
                       featuredProject.year
                     }}</span>
+                    <template v-if="featuredProject.status">
+                      <span class="h-1 w-1 rounded-full bg-acid" />
+                      <span class="text-acid">{{ featuredProject.status }}</span>
+                    </template>
                   </div>
                   <h3
                     class="mb-6 font-sans text-[clamp(4rem,8.5vw,8.5rem)] font-extrabold uppercase leading-[.75] tracking-[-.08em] text-acid md:mb-9"
