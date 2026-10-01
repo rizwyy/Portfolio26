@@ -6,7 +6,8 @@
   color-scheme: dark;
   --ink: #090909;
   --bone: #f0efe9;
-  --acid: #c7ff18;
+  --acid: #00dc82;
+  --aws-orange: #ff9900;
 }
 
 * { box-sizing: border-box; }
@@ -26,8 +27,8 @@ body::before {
 a, button { cursor: none; }
 .site-shell { overflow: clip; }
 .hero-copy { container-type: inline-size; min-width: 0; }
-.hero-title { font-size: min(21cqi, 13.7rem); }
-.hero-title .hero-title-long { font-size: 14cqi; line-height: 1; letter-spacing: -.065em; }
+.hero-title { font-size: clamp(2.8rem, 10vw, 10rem); }
+.hero-title .hero-title-long { line-height: 1; letter-spacing: -.065em; }
 .nav-link { position: relative; }
 .nav-link::after { content: ''; position: absolute; inset: auto 0 -5px; height: 1px; background: var(--acid); transform: scaleX(0); transform-origin: right; transition: transform .3s ease; }
 .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
@@ -37,7 +38,7 @@ a, button { cursor: none; }
 .marquee { animation: marquee 28s linear infinite; }
 .cursor-dot { margin-left: -4px; margin-top: -4px; mix-blend-mode: difference; }
 .cursor-halo { margin-left: -20px; margin-top: -20px; mix-blend-mode: difference; transition: width .25s, height .25s, margin .25s, background .25s; }
-.is-hovering .cursor-halo { width: 72px; height: 72px; margin-left: -36px; margin-top: -36px; background: rgb(199 255 24 / .08); }
+.is-hovering .cursor-halo { width: 72px; height: 72px; margin-left: -36px; margin-top: -36px; background: rgb(0 220 130 / .08); }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 

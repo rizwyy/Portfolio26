@@ -19,6 +19,7 @@ type Project = {
   description: string;
   story?: string;
   details?: string;
+  decision?: string;
   role?: string[];
   stack: string[];
   url?: string;
@@ -27,6 +28,7 @@ type Project = {
   nextSteps?: string;
   accent: string;
   featured?: boolean;
+  hidden?: boolean;
   privacyNote?: string;
 };
 
@@ -41,7 +43,10 @@ const projects: Project[] = [
     story:
       "Helping employees find answers across internal company documents. Contexta combines a Nuxt interface with Amazon Bedrock retrieval and generation, with citations that link answers back to their sources.",
     details:
-      "Built with Cognito authentication, JWT-protected APIs, permission-aware retrieval, and document ingestion. Conversation history, user feedback, guardrail support, latency monitoring, and a versioned RAG evaluation suite support the experience.",
+      "The public demo uses fictional company documents, citations, and a five-question daily limit. The described implementation includes Cognito authentication, protected APIs, permission-aware retrieval, document ingestion, conversation history, feedback, guardrails, monitoring, and RAG evaluation.",
+    decision:
+      "Separate ingestion from question answering: documents are retrieved through a Bedrock Knowledge Base before the model returns a cited answer, while demo authentication and usage limits protect access.",
+    status: "Public demo · Sign-in required",
     role: [
       "System architecture",
       "Full-stack development",
@@ -64,18 +69,22 @@ const projects: Project[] = [
       "CloudWatch",
     ],
     url: "https://contexta-aws.netlify.app/",
-    accent: "#c7ff18",
+    accent: "#00dc82",
     featured: true,
   },
   {
     no: "02",
-    title: "Woltiz",
-    category: "Tailored ecommerce website",
+    title: "Floorsir",
+    category: "Customer-facing flooring retail",
     year: "2024",
     description:
-      "A custom ecommerce experience shaped around the business and its customers.",
+      "A customer-facing flooring catalogue that helps visitors explore categories, compare options, and move into a guided enquiry journey.",
     story:
-      "A tailored ecommerce experience, designed and built around the business, its customers, and the path from product discovery to purchase.",
+      "I translated a flooring retailer’s customer journey into a responsive catalogue experience covering carpets, parquet, vinyl, raised flooring, sports flooring, services, and accessories.",
+    details:
+      "The visible flow supports category browsing, product exploration, designer sign-up, home or store visits, sample requests, and WhatsApp enquiries. The public site does not establish a transactional checkout flow.",
+    decision:
+      "Treat the catalogue and enquiry journey as the product surface, avoiding a checkout claim the public experience does not support.",
     role: [
       "Client acquisition & sales",
       "UX direction",
@@ -86,7 +95,7 @@ const projects: Project[] = [
     ],
     stack: ["Vue", "Nuxt", "TypeScript", "Tailwind CSS", "GSAP"],
     url: "https://carpets-woltiz.netlify.app/",
-    accent: "#c7ff18",
+    accent: "#ff9900",
     featured: true,
   },
   {
@@ -101,7 +110,7 @@ const projects: Project[] = [
       "Built with my co-founder over four weeks, inspired by our own placement-season job searches. Available to try and actively being improved.",
     stack: ["Next.js", "React"],
     url: "https://zentail.netlify.app/",
-    accent: "#c7ff18",
+    accent: "#00dc82",
   },
   {
     no: "04",
@@ -113,6 +122,7 @@ const projects: Project[] = [
     stack: ["Vue", "JavaScript", "Workflow UX"],
     url: "https://github.com/rizwyy/water-round-app",
     accent: "#8de1ff",
+    hidden: true,
   },
   {
     no: "05",
@@ -125,7 +135,7 @@ const projects: Project[] = [
     details: "Working frontend with simulated responses and tool calls.",
     nextSteps: "LLM integration and a FastAPI backend.",
     stack: ["React", "TypeScript", "Tailwind CSS", "shadcn/ui"],
-    accent: "#c7ff18",
+    accent: "#00dc82",
   },
   {
     no: "06",
@@ -140,20 +150,23 @@ const projects: Project[] = [
     nextSteps:
       "S3, Textract, and Bedrock integration for extraction, validation, and classification, with human approval.",
     stack: ["React", "TypeScript", "Tailwind CSS", "shadcn/ui"],
-    accent: "#c7ff18",
+    accent: "#00dc82",
+    hidden: true,
   },
   {
     no: "07",
     title: "Invoxa",
     category: "Invoice management for small businesses",
     year: "2026",
-    status: "Completed · Live",
+    status: "Live demo · AWS workflow unverified",
     description:
-      "An invoice management workspace for Indian small businesses, supporting business workspaces, invoice uploads and previews, manual review and editing, payment tracking, search and filters, archive/restore, CSV export, and dashboard summaries.",
+      "An invoice workspace for Indian small businesses: bring supplier bills together, review original documents beside editable records, confirm details, and track what is paid or due.",
     story:
-      "A complete invoice management workspace that helps Indian small businesses turn scattered supplier documents into organized, searchable payment records.",
+      "A working supplier-invoice workflow with upload and preview, manual review, payment tracking, search and filters, archive and restore, CSV export, and dashboard summaries.",
     details:
-      "A live full-stack release with persistent accounts, isolated workspaces, protected document previews, validation, optimistic updates, and a complete supplier-invoice workflow.",
+      "The public demo explains and previews the workflow with sample invoices. Persistent workspaces and AWS-backed extraction depend on the configured backend and are not independently verified here.",
+    decision:
+      "Keep original documents beside editable records and require human confirmation before an invoice affects totals; AWS extraction remains dependent on backend configuration.",
     role: [
       "Product direction",
       "UX/UI design",
@@ -162,16 +175,16 @@ const projects: Project[] = [
     ],
     stack: ["Nuxt", "Vue", "TypeScript", "Tailwind CSS", "Node.js", "AWS"],
     url: "https://invoxa-aws.netlify.app/",
-    accent: "#c7ff18",
+    accent: "#ff9900",
     featured: true,
   },
 ];
 
 const featuredProjects = computed(() =>
-  projects.filter((project) => project.featured),
+  projects.filter((project) => project.featured && !project.hidden),
 );
 const supportingProjects = computed(() =>
-  projects.filter((project) => !project.featured),
+  projects.filter((project) => !project.featured && !project.hidden),
 );
 
 const tools = [
@@ -244,10 +257,23 @@ onMounted(async () => {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
   const lenis = new Lenis({ duration: 1.05, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
+
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const target = document.querySelector(link.hash);
+      if (!target) return;
+      event.preventDefault();
+      lenis.scrollTo(target);
+    });
+  });
 
   const intro = gsap.timeline();
   intro
@@ -346,7 +372,7 @@ onMounted(async () => {
 <template>
   <div class="site-shell bg-ink text-bone">
     <div
-      class="loader fixed inset-0 z-[100] flex flex-col justify-between bg-acid p-6 text-ink md:p-10"
+      class="loader fixed inset-0 z-[100] flex flex-col justify-between bg-gradient-to-br from-acid via-acid to-aws-orange p-6 text-ink md:p-10"
     >
       <div
         class="flex items-center justify-between font-mono text-[11px] uppercase tracking-[.18em]"
@@ -521,13 +547,13 @@ onMounted(async () => {
 
     <main id="top">
       <section
-        class="hero relative min-h-[100svh] overflow-hidden px-5 pb-8 pt-28 md:px-10 md:pb-10"
+        class="hero relative min-h-[86svh] overflow-hidden px-5 pb-8 pt-28 md:px-10 md:pb-10"
       >
         <div
           class="pointer-events-none absolute left-[12%] top-[12%] h-[44rem] w-[44rem] rounded-full bg-acid/[.035] blur-[120px]"
         />
         <div
-          class="mx-auto grid min-h-[calc(100svh-9rem)] max-w-[1600px] grid-cols-12 items-end"
+          class="mx-auto grid min-h-[calc(86svh-9rem)] max-w-[1600px] grid-cols-12 items-end"
         >
           <div
             class="hero-copy relative z-20 col-span-12 pb-5 md:col-span-8 md:pb-[6vh]"
@@ -536,59 +562,66 @@ onMounted(async () => {
               class="mb-8 flex items-center gap-3 overflow-hidden font-mono text-[10px] uppercase tracking-[.18em] text-smoke md:mb-12"
             >
               <span
-                class="hero-reveal h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#c7ff18]"
+                class="hero-reveal h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#00dc82]"
               />
               <span class="hero-reveal"
-                >Available for select AI & product projects</span
+                >SOFTWARE DEVELOPER · AWS &amp; GENERATIVE AI</span
               >
             </div>
             <h1
               class="hero-title font-sans font-[600] uppercase leading-[.95] tracking-[-.09em]"
             >
               <span class="block overflow-hidden"
+                ><span class="hero-reveal block">I turn business</span></span
+              >
+              <span class="block overflow-hidden"
                 ><span class="hero-reveal block"
-                  >I build <span class="text-acid">AI</span></span
+                  ><span class="mr-[.22em] inline-block">needs</span
+                  ><span>into</span></span
                 ></span
               >
               <span class="block overflow-hidden"
                 ><span class="hero-reveal hero-title-long block"
-                  >applications<span class="text-smoke">.</span></span
+                  ><span class="text-acid">practical software</span
+                  ><span class="text-smoke">.</span></span
                 ></span
               >
             </h1>
             <div
-              class="mt-10 flex flex-col gap-7 md:ml-[31%] md:mt-14 md:max-w-xl md:flex-row md:items-end md:justify-between"
+              class="mt-10 flex max-w-2xl flex-col gap-7 md:mt-14 md:flex-row md:items-start md:justify-between md:gap-10"
             >
               <p
-                class="hero-reveal max-w-sm font-sans text-base font-medium leading-relaxed text-smoke md:text-lg"
+                class="hero-reveal max-w-lg font-sans text-base font-medium leading-relaxed text-smoke md:text-lg"
               >
-                AI Application Engineer building practical, production-minded
-                experiences with TypeScript, Vue, Nuxt, and AWS.
+                My work spans client-facing retail websites, business applications,
+                and an Amazon Bedrock knowledge assistant. I combine full-stack
+                development with a focus on clear workflows and cloud architecture.
               </p>
-              <a
-                href="#work"
-                aria-label="See selected work"
-                class="hero-reveal group flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-bone text-ink transition-colors hover:bg-acid md:h-20 md:w-20"
-              >
-                <ArrowDownRight
-                  class="h-6 w-6 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1"
-                />
-              </a>
+              <div class="hero-reveal flex shrink-0 flex-col items-start gap-4 md:items-end md:pt-1">
+                <a
+                  href="#work"
+                  class="group inline-flex items-center gap-3 rounded-full bg-bone px-5 py-3 font-mono text-[10px] uppercase tracking-[.14em] text-ink transition-colors hover:bg-acid"
+                >
+                  Explore selected projects
+                  <ArrowDownRight class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                </a>
+                <span class="font-mono text-[9px] uppercase tracking-[.14em] text-aws-orange">AWS Certified AI Practitioner · Kozhikode, India</span>
+              </div>
             </div>
           </div>
 
           <div
-            class="portrait-wrap relative col-span-10 col-start-3 mt-8 h-[51vh] min-h-[390px] overflow-hidden md:absolute md:bottom-0 md:right-0 md:mt-0 md:h-[92vh] md:w-[45vw] md:max-w-[720px]"
+            class="portrait-wrap relative col-span-12 mt-8 h-48 w-48 justify-self-center overflow-hidden rounded-full border border-acid/30 bg-white/[.03] sm:h-56 sm:w-56 md:absolute md:bottom-[10vh] md:right-0 md:mt-0 md:h-[92vh] md:w-[45vw] md:max-w-[720px] md:justify-self-auto md:rounded-none md:border-0 md:bg-transparent"
           >
             <!--  -->
             <img
               src="/riswin-portrait.png"
               alt="Portrait of Riswin Mohammed"
-              class="portrait-image h-[110%] w-full object-cover object-top grayscale-[18%]"
+              class="portrait-image h-full w-full scale-[1.18] object-cover object-top grayscale-[18%] md:h-[110%] md:scale-100"
             />
             <div class="absolute inset-0" />
             <div
-              class="absolute bottom-8 right-5 font-mono text-[9px] uppercase tracking-[.18em] text-white/55 md:right-10"
+              class="absolute bottom-8 right-5 hidden font-mono text-[9px] uppercase tracking-[.18em] text-white/55 md:right-10 md:block"
             >
               Kozhikode, India<br />11.2588° N / 75.7804° E
             </div>
@@ -612,23 +645,26 @@ onMounted(async () => {
             <p
               class="reveal text-balance font-sans text-[clamp(2rem,5vw,5.7rem)] font-semibold leading-[1.02] tracking-[-.055em]"
             >
-              I build AI applications that are
-              <span class="text-smoke">useful, grounded, and human</span>—with
-              the product craft to make them feel polished.
+              I turn business needs into
+              <span class="text-smoke">clear, useful software</span>—from
+              customer-facing interfaces to AWS and generative AI workflows.
             </p>
             <div
               class="mt-14 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-20"
             >
               <p class="reveal font-sans text-sm leading-7 text-smoke">
-                As an AWS Certified AI Practitioner, I combine full-stack
-                application development with an AI engineering practice. My work
-                spans practical product interfaces, cloud-ready systems, and the
-                foundations for LLM-powered features.
+                I’m Riswin Mohammed, a software developer based in Kozhikode. My
+                work spans a flooring retail website, a supplier-invoice
+                application, and a company knowledge assistant. On Floorsir, my
+                responsibilities included client acquisition, UX direction,
+                frontend development, and iteration.
               </p>
               <p class="reveal font-sans text-sm leading-7 text-smoke">
-                Vue and Nuxt remain my frontend foundation, alongside
-                TypeScript, Node, AWS, and Amazon Bedrock. I use them to turn
-                product ideas into clear, maintainable applications.
+                My application projects explore how authentication, document
+                workflows, and generative AI fit into useful software. I work with
+                TypeScript, Vue, Nuxt, Node.js, Python, and AWS, and I’m interested
+                in customer-facing cloud roles where understanding the business
+                problem matters as much as implementing the solution.
               </p>
             </div>
             <div
@@ -740,10 +776,11 @@ onMounted(async () => {
           <article
             v-for="featuredProject in featuredProjects"
             :key="featuredProject.no"
+            :id="`project-${featuredProject.title.toLowerCase()}`"
             class="featured-project reveal group relative mb-12 overflow-hidden border border-acid/25 px-5 py-7 md:mb-16 md:px-10 md:py-10"
           >
             <div
-              class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_14%,rgba(199,255,24,.13),transparent_30%),linear-gradient(135deg,rgba(199,255,24,.07),transparent_52%)]"
+              class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_14%,rgba(255,153,0,.16),transparent_30%),linear-gradient(135deg,rgba(0,220,130,.08),transparent_52%)]"
             />
             <div
               class="pointer-events-none absolute -right-10 -top-16 select-none font-sans text-[14rem] font-extrabold leading-none tracking-[-.1em] text-acid/[.035] md:text-[21rem]"
@@ -756,7 +793,7 @@ onMounted(async () => {
               >
                 <div class="flex items-center gap-3">
                   <span
-                    class="h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#c7ff18]"
+                    class="h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#00dc82]"
                   />
                   <span
                     class="font-mono text-[9px] uppercase tracking-[.17em] text-acid"
@@ -783,7 +820,7 @@ onMounted(async () => {
                     </template>
                   </div>
                   <h3
-                    class="mb-6 font-sans text-[clamp(4rem,8.5vw,8.5rem)] font-extrabold uppercase leading-[.75] tracking-[-.08em] text-acid md:mb-9"
+                    class="mb-6 font-sans text-[clamp(2.8rem,8.5vw,8.5rem)] font-extrabold uppercase leading-[.8] tracking-[-.08em] text-acid md:mb-9"
                   >
                     {{ featuredProject.title }}
                   </h3>
@@ -798,6 +835,13 @@ onMounted(async () => {
                   >
                     {{ featuredProject.details }}
                   </p>
+                  <div
+                    v-if="featuredProject.decision"
+                    class="mt-6 max-w-2xl border-l border-acid/50 pl-4"
+                  >
+                    <p class="mb-2 font-mono text-[8px] uppercase tracking-[.14em] text-acid">Technical decision</p>
+                    <p class="font-sans text-sm leading-6 text-smoke">{{ featuredProject.decision }}</p>
+                  </div>
                 </div>
                 <div
                   class="featured-project-reveal col-span-12 flex items-start lg:col-span-5 lg:justify-end lg:pt-2"
@@ -808,7 +852,7 @@ onMounted(async () => {
                     rel="noreferrer"
                     class="group/link inline-flex items-center gap-3 rounded-full border border-acid/40 px-5 py-3 font-mono text-[9px] uppercase tracking-[.14em] text-acid transition-colors duration-300 hover:bg-acid hover:text-ink"
                   >
-                    View live site
+                    {{ featuredProject.status?.toLowerCase().includes("demo") ? "Open demo" : "View live site" }}
                     <ArrowUpRight
                       class="h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
                     />
@@ -859,6 +903,7 @@ onMounted(async () => {
           <article
             v-for="project in supportingProjects"
             :key="project.no"
+            :id="`project-${project.title.toLowerCase()}`"
             class="project-row group relative grid grid-cols-12 gap-y-8 border-t border-white/15 py-10 md:py-14"
           >
             <div class="col-span-2 font-mono text-[10px] text-smoke">
@@ -926,15 +971,18 @@ onMounted(async () => {
                 >
               </div>
             </div>
-            <div class="col-span-2 flex justify-end">
+            <div
+              class="col-span-10 col-start-3 flex items-start justify-start md:col-span-2 md:col-start-auto md:justify-end"
+            >
               <a
                 v-if="project.url"
                 :href="project.url"
                 target="_blank"
                 rel="noreferrer"
                 :aria-label="`View ${project.title}`"
-                class="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:rotate-45 group-hover:border-acid group-hover:bg-acid group-hover:text-ink md:h-16 md:w-16"
+                class="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/20 px-4 py-3 font-mono text-[9px] uppercase tracking-[.1em] transition-all duration-300 group-hover:border-acid group-hover:bg-acid group-hover:text-ink"
               >
+                <span>Open project</span>
                 <ArrowUpRight class="h-5 w-5" />
               </a>
             </div>
@@ -975,32 +1023,43 @@ onMounted(async () => {
             <p
               class="reveal font-mono text-[10px] uppercase tracking-[.2em] text-acid"
             >
-              ( 03 / Approach )
+              ( 03 / Capabilities → evidence )
             </p>
           </div>
           <div class="col-span-12 md:col-span-9">
             <div
               v-for="(item, index) in [
-                'Think in systems',
-                'Design with intent',
-                'Ship with care',
+                { title: 'Customer delivery', evidence: 'Floorsir · client-facing retail catalogue and enquiry flow', href: '#project-floorsir' },
+                { title: 'AWS & GenAI', evidence: 'Contexta · Bedrock knowledge assistant and cited answers', href: '#project-contexta' },
+                { title: 'Security & data', evidence: 'Contexta and Invoxa · authentication, permissions, and document workflows', href: '#project-contexta' },
+                { title: 'Asynchronous workflows', evidence: 'Invoxa · extraction architecture documented separately from verified deployment', href: '#project-invoxa' },
+                { title: 'Application development', evidence: 'Zentail, Relay, and Folio · customer and operations interfaces', href: '#project-zentail' },
               ]"
-              :key="item"
+              :key="item.title"
               class="reveal group flex items-center justify-between border-b border-white/15 py-8 md:py-12"
             >
               <div class="flex items-baseline gap-5 md:gap-10">
                 <span class="font-mono text-[10px] text-smoke"
                   >0{{ index + 1 }}</span
                 >
-                <h3
+                <div>
+                  <h3
                   class="font-sans text-[clamp(2rem,5vw,5.5rem)] font-semibold tracking-[-.055em] transition-transform duration-500 group-hover:translate-x-3"
-                >
-                  {{ item }}
-                </h3>
+                  >
+                    {{ item.title }}
+                  </h3>
+                  <p class="mt-3 max-w-xl font-sans text-sm leading-6 text-smoke">
+                    {{ item.evidence }}
+                  </p>
+                </div>
               </div>
-              <MoveRight
-                class="h-6 w-6 text-acid opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
-              />
+              <a
+                :href="item.href"
+                :aria-label="`View ${item.title} evidence`"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-acid transition-all duration-300 group-hover:translate-x-1 group-hover:border-acid"
+              >
+                <MoveRight class="h-5 w-5" />
+              </a>
             </div>
           </div>
         </div>
@@ -1008,7 +1067,7 @@ onMounted(async () => {
 
       <section
         id="contact"
-        class="relative overflow-hidden bg-acid px-5 py-24 text-ink md:px-10 md:py-36"
+        class="relative overflow-hidden bg-gradient-to-br from-acid via-acid to-aws-orange px-5 py-24 text-ink md:px-10 md:py-36"
       >
         <div
           class="absolute -right-16 -top-24 select-none font-sans text-[28vw] font-extrabold leading-none tracking-[-.1em] text-black/[.055]"
@@ -1024,7 +1083,7 @@ onMounted(async () => {
           <h2
             class="reveal max-w-[1300px] font-sans text-[clamp(4rem,12.5vw,13rem)] font-extrabold uppercase leading-[.73] tracking-[-.09em]"
           >
-            Let's make<br />it real<span class="text-white">.</span>
+            Let’s discuss<br />software<span class="text-white">.</span>
           </h2>
           <div
             class="mt-16 flex flex-col gap-10 border-t border-black/20 pt-8 md:flex-row md:items-center md:justify-between"
@@ -1032,8 +1091,9 @@ onMounted(async () => {
             <p
               class="reveal max-w-md font-sans text-sm font-semibold leading-6"
             >
-              Have a product to build, an interface to sharpen, or an ambitious
-              idea worth exploring? My inbox is open.
+              Let’s discuss software, cloud, and customer problems. I’m seeking
+              opportunities in software development and cloud solutions, with a
+              particular interest in customer-facing work and generative AI.
             </p>
             <div class="reveal flex flex-wrap gap-3">
               <a
@@ -1055,11 +1115,11 @@ onMounted(async () => {
     </main>
 
     <footer
-      class="flex flex-col gap-4 bg-acid px-5 pb-8 pt-4 font-mono text-[9px] uppercase tracking-[.14em] text-ink md:flex-row md:items-center md:justify-between md:px-10"
+      class="flex flex-col gap-4 border-t border-aws-orange/45 bg-ink px-5 pb-8 pt-4 font-mono text-[9px] uppercase tracking-[.14em] text-smoke md:flex-row md:items-center md:justify-between md:px-10"
     >
       <span>© {{ year }} Riswin Mohammed</span
       ><span>Designed in Kerala · Built with Nuxt + GSAP</span
-      ><a href="#top" class="flex items-center gap-2"
+      ><a href="#top" class="flex items-center gap-2 text-acid transition-colors hover:text-aws-orange"
         >Back to top <ArrowUpRight class="h-3 w-3"
       /></a>
     </footer>

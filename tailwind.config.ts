@@ -7,7 +7,8 @@ export default <Partial<Config>>{
       colors: {
         ink: '#090909',
         bone: '#f0efe9',
-        acid: '#c7ff18',
+        acid: '#00dc82',
+        'aws-orange': '#ff9900',
         smoke: '#a5a59f'
       },
       fontFamily: {

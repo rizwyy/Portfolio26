@@ -10,10 +10,16 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
-      title: 'Riswin Mohammed — Vue & Nuxt Developer',
+      title: 'Riswin Mohammed | Software Developer — AWS & GenAI',
       meta: [
-        { name: 'description', content: 'Portfolio of Riswin Mohammed — a Vue and Nuxt developer crafting sharp, fast digital products.' },
-        { name: 'theme-color', content: '#090909' }
+        { name: 'description', content: 'Portfolio of Riswin Mohammed, a software developer building customer-facing applications with TypeScript, Vue, Nuxt, AWS, and generative AI.' },
+        { name: 'theme-color', content: '#00dc82' },
+        { property: 'og:title', content: 'Riswin Mohammed | Software Developer — AWS & GenAI' },
+        { property: 'og:description', content: 'Software developer building customer-facing applications, AWS workflows, and generative AI products.' },
+        { property: 'og:type', content: 'website' },
+        { name: 'twitter:card', content: 'summary' },
+        { name: 'twitter:title', content: 'Riswin Mohammed | Software Developer — AWS & GenAI' },
+        { name: 'twitter:description', content: 'Software developer building customer-facing applications, AWS workflows, and generative AI products.' }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
