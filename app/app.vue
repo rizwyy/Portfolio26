@@ -28,7 +28,12 @@ type Project = {
   nextSteps?: string;
   accent: string;
   featured?: boolean;
+  primary?: boolean;
   hidden?: boolean;
+  architecture?: Array<{
+    label: string;
+    steps: string[];
+  }>;
   privacyNote?: string;
 };
 
@@ -71,6 +76,29 @@ const projects: Project[] = [
     url: "https://contexta-aws.netlify.app/",
     accent: "#00dc82",
     featured: true,
+    primary: true,
+    architecture: [
+      {
+        label: "Question path",
+        steps: [
+          "Nuxt client",
+          "Cognito session",
+          "API Gateway",
+          "Lambda",
+          "Bedrock Knowledge Base",
+          "Cited answer",
+        ],
+      },
+      {
+        label: "Document path",
+        steps: [
+          "Private S3",
+          "Document ingestion",
+          "Bedrock Knowledge Base",
+          "Permission-aware retrieval",
+        ],
+      },
+    ],
   },
   {
     no: "02",
@@ -197,6 +225,44 @@ const tools = [
   "VUE",
   "NODE",
   "RAG",
+];
+
+const awsCapabilities = [
+  {
+    title: "Identity & access",
+    services: "Amazon Cognito · IAM",
+    evidence:
+      "Contexta’s described implementation uses authenticated sessions, protected APIs, and permission-aware retrieval.",
+    href: "#project-contexta",
+  },
+  {
+    title: "Serverless APIs",
+    services: "API Gateway · AWS Lambda",
+    evidence:
+      "Contexta separates the Nuxt client from the retrieval workflow through a protected API and Python Lambda functions.",
+    href: "#project-contexta",
+  },
+  {
+    title: "Storage & application data",
+    services: "Amazon S3 · DynamoDB",
+    evidence:
+      "The architecture separates private document storage from conversation history, feedback, and application state.",
+    href: "#project-contexta",
+  },
+  {
+    title: "Generative AI & RAG",
+    services: "Amazon Bedrock · Bedrock Knowledge Bases",
+    evidence:
+      "Contexta retrieves relevant company material before generating an answer and returns citations for verification.",
+    href: "#project-contexta",
+  },
+  {
+    title: "Operations & evaluation",
+    services: "CloudWatch · Guardrails · RAG evaluation",
+    evidence:
+      "The project scope includes latency monitoring, guardrail support, user feedback, and a versioned evaluation suite.",
+    href: "#project-contexta",
+  },
 ];
 
 const certification = {
@@ -565,7 +631,7 @@ onMounted(async () => {
                 class="hero-reveal h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#00dc82]"
               />
               <span class="hero-reveal"
-                >SOFTWARE DEVELOPER · AWS &amp; GENERATIVE AI</span
+                >AWS-CERTIFIED SOFTWARE DEVELOPER</span
               >
             </div>
             <h1
@@ -593,9 +659,9 @@ onMounted(async () => {
               <p
                 class="hero-reveal max-w-lg font-sans text-base font-medium leading-relaxed text-smoke md:text-lg"
               >
-                My work spans client-facing retail websites, business applications,
-                and an Amazon Bedrock knowledge assistant. I combine full-stack
-                development with a focus on clear workflows and cloud architecture.
+                I design customer-facing software and cloud workflows using AWS,
+                Nuxt, TypeScript, and Python. My recent work covers secure
+                serverless APIs, document systems, and grounded generative AI.
               </p>
               <div class="hero-reveal flex shrink-0 flex-col items-start gap-4 md:items-end md:pt-1">
                 <a
@@ -660,11 +726,11 @@ onMounted(async () => {
                 frontend development, and iteration.
               </p>
               <p class="reveal font-sans text-sm leading-7 text-smoke">
-                My application projects explore how authentication, document
-                workflows, and generative AI fit into useful software. I work with
-                TypeScript, Vue, Nuxt, Node.js, Python, and AWS, and I’m interested
-                in customer-facing cloud roles where understanding the business
-                problem matters as much as implementing the solution.
+                I’m particularly interested in building secure, customer-facing
+                applications on AWS. My recent work explores authentication,
+                serverless APIs, document workflows, retrieval-augmented
+                generation, and human-controlled AI systems—while keeping the
+                business problem central to the architecture.
               </p>
             </div>
             <div
@@ -777,7 +843,8 @@ onMounted(async () => {
             v-for="featuredProject in featuredProjects"
             :key="featuredProject.no"
             :id="`project-${featuredProject.title.toLowerCase()}`"
-            class="featured-project reveal group relative mb-12 overflow-hidden border border-acid/25 px-5 py-7 md:mb-16 md:px-10 md:py-10"
+            class="featured-project reveal group relative mb-12 overflow-hidden border px-5 py-7 md:mb-16 md:px-10 md:py-10"
+            :class="featuredProject.primary ? 'border-aws-orange/50' : 'border-acid/25'"
           >
             <div
               class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_14%,rgba(255,153,0,.16),transparent_30%),linear-gradient(135deg,rgba(0,220,130,.08),transparent_52%)]"
@@ -796,8 +863,9 @@ onMounted(async () => {
                     class="h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#00dc82]"
                   />
                   <span
-                    class="font-mono text-[9px] uppercase tracking-[.17em] text-acid"
-                    >Featured Project</span
+                    class="font-mono text-[9px] uppercase tracking-[.17em]"
+                    :class="featuredProject.primary ? 'text-aws-orange' : 'text-acid'"
+                    >{{ featuredProject.primary ? "Primary AWS case study" : "Featured project" }}</span
                   >
                 </div>
                 <span
@@ -857,6 +925,46 @@ onMounted(async () => {
                       class="h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
                     />
                   </a>
+                </div>
+                <div
+                  v-if="featuredProject.architecture?.length"
+                  class="featured-project-reveal col-span-12 border-y border-white/10 py-7 md:py-8"
+                >
+                  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                      <p class="mb-2 font-mono text-[8px] uppercase tracking-[.17em] text-aws-orange">
+                        AWS architecture
+                      </p>
+                      <p class="max-w-xl font-sans text-sm leading-6 text-smoke">
+                        Two separated paths keep document ingestion distinct from authenticated question answering.
+                      </p>
+                    </div>
+                    <span class="font-mono text-[8px] uppercase tracking-[.12em] text-smoke">
+                      Described implementation
+                    </span>
+                  </div>
+                  <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                    <div
+                      v-for="flow in featuredProject.architecture"
+                      :key="flow.label"
+                      class="border border-white/10 bg-white/[.025] p-4"
+                    >
+                      <p class="mb-4 font-mono text-[8px] uppercase tracking-[.15em] text-bone">
+                        {{ flow.label }}
+                      </p>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <template v-for="(step, stepIndex) in flow.steps" :key="step">
+                          <span class="rounded-full border border-acid/25 bg-acid/[.06] px-3 py-2 font-mono text-[8px] uppercase tracking-[.08em] text-acid">
+                            {{ step }}
+                          </span>
+                          <MoveRight
+                            v-if="stepIndex < flow.steps.length - 1"
+                            class="h-3.5 w-3.5 shrink-0 text-aws-orange"
+                          />
+                        </template>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div
                   class="featured-project-reveal col-span-12 border-t border-white/10 pt-7 lg:col-span-7 lg:pt-8"
@@ -1023,18 +1131,20 @@ onMounted(async () => {
             <p
               class="reveal font-mono text-[10px] uppercase tracking-[.2em] text-acid"
             >
-              ( 03 / Capabilities → evidence )
+              ( 03 / AWS capability → evidence )
             </p>
           </div>
           <div class="col-span-12 md:col-span-9">
+            <div class="reveal mb-10 border-l border-aws-orange/60 pl-5 md:mb-14 md:max-w-3xl">
+              <p class="font-sans text-lg font-medium leading-8 text-bone md:text-xl">
+                I’m building toward customer-facing cloud roles by connecting each AWS service to a concrete application decision—not a logo list.
+              </p>
+              <p class="mt-3 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-smoke">
+                Evidence below reflects the described Contexta implementation; public-demo availability is stated separately.
+              </p>
+            </div>
             <div
-              v-for="(item, index) in [
-                { title: 'Customer delivery', evidence: 'Floorsir · client-facing retail catalogue and enquiry flow', href: '#project-floorsir' },
-                { title: 'AWS & GenAI', evidence: 'Contexta · Bedrock knowledge assistant and cited answers', href: '#project-contexta' },
-                { title: 'Security & data', evidence: 'Contexta and Invoxa · authentication, permissions, and document workflows', href: '#project-contexta' },
-                { title: 'Asynchronous workflows', evidence: 'Invoxa · extraction architecture documented separately from verified deployment', href: '#project-invoxa' },
-                { title: 'Application development', evidence: 'Zentail, Relay, and Folio · customer and operations interfaces', href: '#project-zentail' },
-              ]"
+              v-for="(item, index) in awsCapabilities"
               :key="item.title"
               class="reveal group flex items-center justify-between border-b border-white/15 py-8 md:py-12"
             >
@@ -1048,6 +1158,9 @@ onMounted(async () => {
                   >
                     {{ item.title }}
                   </h3>
+                  <p class="mt-2 font-mono text-[8px] uppercase tracking-[.13em] text-aws-orange">
+                    {{ item.services }}
+                  </p>
                   <p class="mt-3 max-w-xl font-sans text-sm leading-6 text-smoke">
                     {{ item.evidence }}
                   </p>
