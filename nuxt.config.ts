@@ -10,16 +10,16 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
-      title: 'Riswin Mohammed | Software Developer — AWS & GenAI',
+      title: 'Riswin Mohammed | AI Application Engineer — AWS & GenAI',
       meta: [
-        { name: 'description', content: 'Portfolio of Riswin Mohammed, a software developer building customer-facing applications with TypeScript, Vue, Nuxt, AWS, and generative AI.' },
+        { name: 'description', content: 'Portfolio of Riswin Mohammed, an AI application engineer building grounded generative AI products, retrieval workflows, secure APIs, and customer-facing systems on AWS.' },
         { name: 'theme-color', content: '#00dc82' },
-        { property: 'og:title', content: 'Riswin Mohammed | Software Developer — AWS & GenAI' },
-        { property: 'og:description', content: 'Software developer building customer-facing applications, AWS workflows, and generative AI products.' },
+        { property: 'og:title', content: 'Riswin Mohammed | AI Application Engineer — AWS & GenAI' },
+        { property: 'og:description', content: 'AI application engineer building grounded generative AI products, retrieval workflows, secure APIs, and customer-facing systems on AWS.' },
         { property: 'og:type', content: 'website' },
         { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:title', content: 'Riswin Mohammed | Software Developer — AWS & GenAI' },
-        { name: 'twitter:description', content: 'Software developer building customer-facing applications, AWS workflows, and generative AI products.' }
+        { name: 'twitter:title', content: 'Riswin Mohammed | AI Application Engineer — AWS & GenAI' },
+        { name: 'twitter:description', content: 'AI application engineer building grounded generative AI products, retrieval workflows, secure APIs, and customer-facing systems on AWS.' }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

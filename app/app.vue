@@ -28,6 +28,7 @@ type Project = {
   nextSteps?: string;
   accent: string;
   featured?: boolean;
+  featureOrder?: number;
   primary?: boolean;
   hidden?: boolean;
   architecture?: Array<{
@@ -76,6 +77,7 @@ const projects: Project[] = [
     url: "https://contexta-aws.netlify.app/",
     accent: "#00dc82",
     featured: true,
+    featureOrder: 1,
     primary: true,
     architecture: [
       {
@@ -125,6 +127,7 @@ const projects: Project[] = [
     url: "https://carpets-woltiz.netlify.app/",
     accent: "#ff9900",
     featured: true,
+    featureOrder: 3,
   },
   {
     no: "03",
@@ -205,11 +208,18 @@ const projects: Project[] = [
     url: "https://invoxa-aws.netlify.app/",
     accent: "#ff9900",
     featured: true,
+    featureOrder: 2,
   },
 ];
 
 const featuredProjects = computed(() =>
-  projects.filter((project) => project.featured && !project.hidden),
+  projects
+    .filter((project) => project.featured && !project.hidden)
+    .sort(
+      (firstProject, secondProject) =>
+        (firstProject.featureOrder ?? Number.MAX_SAFE_INTEGER) -
+        (secondProject.featureOrder ?? Number.MAX_SAFE_INTEGER),
+    ),
 );
 const supportingProjects = computed(() =>
   projects.filter((project) => !project.featured && !project.hidden),
@@ -218,13 +228,13 @@ const supportingProjects = computed(() =>
 const tools = [
   "AWS",
   "BEDROCK",
-  "LLMS",
+  "RAG",
+  "LLM EVALUATION",
   "PYTHON",
   "TYPESCRIPT",
-  "NUXT",
-  "VUE",
-  "NODE",
-  "RAG",
+  "COGNITO",
+  "LAMBDA",
+  "HUMAN REVIEW",
 ];
 
 const awsCapabilities = [
@@ -631,25 +641,23 @@ onMounted(async () => {
                 class="hero-reveal h-2 w-2 rounded-full bg-acid shadow-[0_0_18px_#00dc82]"
               />
               <span class="hero-reveal"
-                >AWS-CERTIFIED SOFTWARE DEVELOPER</span
+                >AI APPLICATION ENGINEER · AWS CERTIFIED</span
               >
             </div>
             <h1
               class="hero-title font-sans font-[600] uppercase leading-[.95] tracking-[-.09em]"
             >
               <span class="block overflow-hidden"
-                ><span class="hero-reveal block">I turn business</span></span
+                ><span class="hero-reveal block">I build AI</span></span
               >
               <span class="block overflow-hidden"
-                ><span class="hero-reveal block"
-                  ><span class="mr-[.22em] inline-block">needs</span
-                  ><span>into</span></span
+                ><span class="hero-reveal block text-acid"
+                  >applications</span
                 ></span
               >
               <span class="block overflow-hidden"
                 ><span class="hero-reveal hero-title-long block"
-                  ><span class="text-acid">practical software</span
-                  ><span class="text-smoke">.</span></span
+                  >for real work<span class="text-smoke">.</span></span
                 ></span
               >
             </h1>
@@ -659,9 +667,10 @@ onMounted(async () => {
               <p
                 class="hero-reveal max-w-lg font-sans text-base font-medium leading-relaxed text-smoke md:text-lg"
               >
-                I design customer-facing software and cloud workflows using AWS,
-                Nuxt, TypeScript, and Python. My recent work covers secure
-                serverless APIs, document systems, and grounded generative AI.
+                I design and build AI applications that connect language models,
+                retrieval, secure APIs, and human review. Recent work includes an
+                Amazon Bedrock knowledge assistant, document workflows, and
+                AI-assisted products.
               </p>
               <div class="hero-reveal flex shrink-0 flex-col items-start gap-4 md:items-end md:pt-1">
                 <a
@@ -711,19 +720,19 @@ onMounted(async () => {
             <p
               class="reveal text-balance font-sans text-[clamp(2rem,5vw,5.7rem)] font-semibold leading-[1.02] tracking-[-.055em]"
             >
-              I turn business needs into
-              <span class="text-smoke">clear, useful software</span>—from
-              customer-facing interfaces to AWS and generative AI workflows.
+              I design <span class="text-acid">AI applications</span> around
+              real workflows, reliable information, and human decisions—not AI
+              features added without a purpose.
             </p>
             <div
               class="mt-14 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-20"
             >
               <p class="reveal font-sans text-sm leading-7 text-smoke">
-                I’m Riswin Mohammed, a software developer based in Kozhikode. My
-                work spans a flooring retail website, a supplier-invoice
-                application, and a company knowledge assistant. On Floorsir, my
-                responsibilities included client acquisition, UX direction,
-                frontend development, and iteration.
+                I’m Riswin Mohammed, an AI application engineer based in
+                Kozhikode. My work includes Contexta, a cited company knowledge
+                assistant; Invoxa, a human-reviewed invoice workflow; and
+                Zentail, an AI-assisted job-search product. I also bring
+                client-facing product delivery experience from Floorsir.
               </p>
               <p class="reveal font-sans text-sm leading-7 text-smoke">
                 I’m particularly interested in building secure, customer-facing
@@ -1196,7 +1205,7 @@ onMounted(async () => {
           <h2
             class="reveal max-w-[1300px] font-sans text-[clamp(4rem,12.5vw,13rem)] font-extrabold uppercase leading-[.73] tracking-[-.09em]"
           >
-            Let’s discuss<br />software<span class="text-white">.</span>
+            Let’s discuss<br />AI systems<span class="text-white">.</span>
           </h2>
           <div
             class="mt-16 flex flex-col gap-10 border-t border-black/20 pt-8 md:flex-row md:items-center md:justify-between"
@@ -1204,9 +1213,9 @@ onMounted(async () => {
             <p
               class="reveal max-w-md font-sans text-sm font-semibold leading-6"
             >
-              Let’s discuss software, cloud, and customer problems. I’m seeking
-              opportunities in software development and cloud solutions, with a
-              particular interest in customer-facing work and generative AI.
+              I’m seeking AI application engineering and customer-facing cloud
+              opportunities—especially where language models, retrieval, AWS,
+              and thoughtful product decisions come together.
             </p>
             <div class="reveal flex flex-wrap gap-3">
               <a
@@ -1231,7 +1240,7 @@ onMounted(async () => {
       class="flex flex-col gap-4 border-t border-aws-orange/45 bg-ink px-5 pb-8 pt-4 font-mono text-[9px] uppercase tracking-[.14em] text-smoke md:flex-row md:items-center md:justify-between md:px-10"
     >
       <span>© {{ year }} Riswin Mohammed</span
-      ><span>Designed in Kerala · Built with Nuxt + GSAP</span
+      ><span>AI applications · AWS · Human-centered systems</span
       ><a href="#top" class="flex items-center gap-2 text-acid transition-colors hover:text-aws-orange"
         >Back to top <ArrowUpRight class="h-3 w-3"
       /></a>
